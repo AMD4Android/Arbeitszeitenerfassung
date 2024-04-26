@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Arbeitszeitenerfassung</string>
+
+    <string-array name="Schichten">
+        <item>Schicht auswählen</item>
+        <item>Frühschicht</item>
+        <item>Spätschicht</item>
+        <item>Nachtschicht</item>
+
+    </string-array>
+    <string name="datum">Datum</string>
+    <string name="von">Von</string>
+    <string name="bis">Bis</string>
+    <string name="dauer">Dauer</string>
+
+
+</resources>

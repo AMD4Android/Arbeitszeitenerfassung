@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="titleTextColor">#ff55ff</item>
+        <item name="title">Arbeitszeitenerfassung</item>
+    </style>
+
+    <!--<style name="Theme.Arbeitszeitenerfassung" parent="Base.Theme.Arbeitszeitenerfassung" />-->
+    <style name="TextAppearance.AppCompat.Widget.ActionBar.Title" parent="@android:style/TextAppearance">
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>
