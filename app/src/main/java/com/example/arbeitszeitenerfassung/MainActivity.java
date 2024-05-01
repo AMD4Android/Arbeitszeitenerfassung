@@ -446,6 +446,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 textViewTime.setLayoutParams(params);
 
                 textViewTime.setText(stunden_zweistellig + ":" + minuten_zweistellig);
+
             }
 
             private String getTimezweistellig(int t) {
