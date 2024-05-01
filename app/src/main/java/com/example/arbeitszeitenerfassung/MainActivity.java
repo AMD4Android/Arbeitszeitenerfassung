@@ -19,6 +19,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout.LayoutParams;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private RadioButton Radiobutton_Spaet;
     private RadioButton Radiobutton_Nacht;
 
-    private ArrayList<Arbeitszeit> zeitList;
+    public  static ArrayList<Arbeitszeit> zeitList;
 
     private ArbeitszeitenDAO arbeitszeitDAO;
     private TextView txt_arbeitszeitenbeginn;
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Date endTime;
 
     private Date pauseTime;
+
+    private String Arbeitsschicht;
     private long differenceMillis;
     private long hours;
     private long minutes;
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         txt_arbeitszeitenende = findViewById(R.id.txt_arbeitszeitenende);
         addButton = findViewById(R.id.addButton);
 
+        Arbeitsschicht = "NON";
         // Ein Item in die ListView hinzufügen
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             }
                             String Dauer = hoursString + ":" + minutesString;
 
-                            arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
+                            arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag,Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
                             Toast.makeText(MainActivity.this, "Arbeitszeiten hinzugefügt", Toast.LENGTH_SHORT).show();
                             dateButton.setText("Datum");
                             txt_arbeitszeitenbeginn.setText("Zeit eingeben");
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     } else if (ArbeitstagisCharacter == false && ArbeitsbeginnisNumericA == true && ArbeitsendeisNumericA == false) {
                         teil2 = false;
 
-                        arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsbeginn, "", ""), teil2);
+                        arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag,Arbeitsschicht, Arbeitsbeginn, "", ""), teil2);
                         Toast.makeText(MainActivity.this, "Arbeitszeit hinzugefügt", Toast.LENGTH_SHORT).show();
                         dateButton.setText("Datum");
                         txt_arbeitszeitenbeginn.setText("Zeit eingeben");
@@ -227,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 minutesString = String.valueOf(minutes);
                             }
                             String Dauer = hoursString + ":" + minutesString;
-                            arbeitszeitDAO.addArbeitstag(new Arbeitszeit(ausgewaehlteDatum, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
+                            arbeitszeitDAO.addArbeitstag(new Arbeitszeit(ausgewaehlteDatum,Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
                             Toast.makeText(MainActivity.this, "Arbeitszeit hinzugefügt", Toast.LENGTH_SHORT).show();
                             dateButton.setText("Datum");
                             txt_arbeitszeitenbeginn.setText("Zeit eingeben");
@@ -270,12 +275,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 Radiobutton_Frueh.setChecked(true);
+                Arbeitsschicht = "FS";
             }
         });
         Radiobutton_Spaet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Radiobutton_Spaet.setChecked(true);
+                Arbeitsschicht = "SS";
 
             }
         });
@@ -283,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 Radiobutton_Nacht.setChecked(true);
+                Arbeitsschicht = "NS";
 
             }
         });
@@ -398,6 +406,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String stunden_zweistellig = getTimezweistellig(hourOfDay);
 
                 TextView textViewTime = findViewById(R.id.txt_arbeitszeitenbeginn);
+                LayoutParams params = (LayoutParams) textViewTime.getLayoutParams();
+
+                params.leftMargin = (int) getResources().getDimension(R.dimen.margin_left);
+                textViewTime.setLayoutParams(params);
+
                 textViewTime.setText(stunden_zweistellig + ":" + minuten_zweistellig);
             }
 
@@ -427,6 +440,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String stunden_zweistellig = getTimezweistellig(hourOfDay);
 
                 TextView textViewTime = findViewById(R.id.txt_arbeitszeitenende);
+                LayoutParams params = (LayoutParams) textViewTime.getLayoutParams();
+
+                params.leftMargin = (int) getResources().getDimension(R.dimen.margin_left);
+                textViewTime.setLayoutParams(params);
+
                 textViewTime.setText(stunden_zweistellig + ":" + minuten_zweistellig);
             }
 

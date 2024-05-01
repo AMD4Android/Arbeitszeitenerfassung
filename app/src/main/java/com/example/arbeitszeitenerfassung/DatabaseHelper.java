@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "arbeitszeiten_table";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_date = "datum";
+    private static final String COLUMN_arbeitsschicht = "schicht";
     private static final String COLUMN_arbeitsbeginn = "von";
     private static final String COLUMN_arbeitsende = "bis";
     private static final String COLUMN_arbeitsdauer = "dauer";
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_date + " TEXT,"
+                + COLUMN_arbeitsschicht + " TEXT,"
                 + COLUMN_arbeitsbeginn + " TEXT,"
                 + COLUMN_arbeitsende + " TEXT,"
                 + COLUMN_arbeitsdauer + " TEXT"

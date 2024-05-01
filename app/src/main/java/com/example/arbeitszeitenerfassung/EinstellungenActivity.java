@@ -2,10 +2,13 @@ package com.example.arbeitszeitenerfassung;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RouteListingPreference;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -16,7 +19,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class EinstellungenActivity extends AppCompatActivity {
@@ -26,6 +36,13 @@ public class EinstellungenActivity extends AppCompatActivity {
     private EditText txt_spaetschichtspause;
     private EditText txt_nachtschichtspause;
     private Button btn_getArbeitsstunden;
+    public EditText txt_Monatseingabe;
+    public EditText txt_Jahreingabe;
+    private TextView txt_gearbeitetezeiten;
+    private LinearLayout Pauseneingabenlayout;
+    private LinearLayout Stundenlohneingabelayout;
+    private LinearLayout Arbeitsstundenberechnungslayout;
+    private ArrayList<String> Arbeitsstundenliste;
 
     private static final String PREFS_NAME = "MyPrefs";
     private static final String EDIT_TEXT_VALUE_KEY = "editTextValue";
@@ -44,6 +61,12 @@ public class EinstellungenActivity extends AppCompatActivity {
         txt_spaetschichtspause = findViewById(R.id.txt_spaetschichtspause);
         txt_nachtschichtspause = findViewById(R.id.txt_nachtschichtspause);
         btn_getArbeitsstunden = findViewById(R.id.btn_getArbeitsstunden);
+        txt_Monatseingabe = findViewById(R.id.Monatseingabe);
+        txt_Jahreingabe = findViewById(R.id.Jahreingabe);
+        txt_gearbeitetezeiten = findViewById(R.id.txt_gearbeitetezeiten);
+        Pauseneingabenlayout = findViewById(R.id.Pauseneingabenlayout);
+        Stundenlohneingabelayout = findViewById(R.id.Stundenlohneingabelayout);
+        Arbeitsstundenberechnungslayout = findViewById(R.id.Arbeitsstundenberechnungslayout);
         loadPausezeiten();
         boolean Buttonistklickable = getIntent().getBooleanExtra("Buttonistklickable", false);
 
@@ -72,19 +95,99 @@ public class EinstellungenActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
-        if(Buttonistklickable == true){
+        if (Buttonistklickable == true) {
+            Pauseneingabenlayout.setVisibility(View.GONE);
+
             btn_getArbeitsstunden.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (!txt_Monatseingabe.getText().toString().isEmpty() && !txt_Jahreingabe.getText().toString().isEmpty()) {
+                        ArrayList<Arbeitszeit> liste = MainActivity.zeitList;
+
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy");
+                        SimpleDateFormat sdf2 = new SimpleDateFormat("MM.yyyy");
+                        String dateextrahiert = null;
+                        if (txt_Monatseingabe.getText().toString().length() == 2) {
+                            dateextrahiert = txt_Monatseingabe.getText().toString() + "." + txt_Jahreingabe.getText().toString();
+
+                        } else {
+                            dateextrahiert = "0" + txt_Monatseingabe.getText().toString() + "." + txt_Jahreingabe.getText().toString();
+
+                        }
+                        Arbeitsstundenliste = new ArrayList<>();
+
+                        for (Arbeitszeit arbeitszeit : liste) {
+
+
+                            try {
+                                String datum1 = arbeitszeit.getDatum().toString();
+                                Date date1 = sdf1.parse(datum1);
+                                String monatJahr1 = sdf2.format(date1);
+                                Date date2 = sdf2.parse(dateextrahiert);
+                                String monatJahr2 = sdf2.format(date2);
+
+                                if (monatJahr1.equals(monatJahr2)) {
+
+
+                                    Arbeitsstundenliste.add(arbeitszeit.getTagesarbeitDauer());
+
+                                }
+
+                            } catch (ParseException e) {
+                                Toast.makeText(EinstellungenActivity.this, "Das Parsen ist schiefgelaufen", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                        // hier werden die Arbeitszeiten in eine Liste hinzugefügt und addiert dann werden die angezeigt
+                        String gearbeitete_Stunden = rechneStunden(Arbeitsstundenliste);
+                        txt_gearbeitetezeiten.setText(gearbeitete_Stunden);
+
+                    }
+
+
                     Toast.makeText(EinstellungenActivity.this, "Button wurde geklickt", Toast.LENGTH_SHORT).show();
 
                 }
             });
+        } else {
+            Stundenlohneingabelayout.setVisibility(View.GONE);
+            Arbeitsstundenberechnungslayout.setVisibility(View.GONE);
+
         }
 
 
     }
 
+    private String rechneStunden(ArrayList<String> arbeitsstundenliste) {
+        String Summe = null;
+
+        // Summe der Stunden und Minuten initialisieren
+        int summeStunden = 0;
+        int summeMinuten = 0;
+
+        // Durchlaufe die Arbeitsstundenliste
+        for (String zeit : arbeitsstundenliste) {
+            // Teile die Zeit in Stunden und Minuten auf
+            String[] teile = zeit.split(":");
+            int stunden = Integer.parseInt(teile[0]);
+            int minuten = Integer.parseInt(teile[1]);
+
+            // Addiere die Stunden und Minuten zur Summe
+            summeStunden += stunden;
+            summeMinuten += minuten;
+
+            // Überprüfe, ob die Summe der Minuten größer als 59 ist
+            if (summeMinuten >= 60) {
+                // Füge eine Stunde hinzu
+                summeStunden++;
+                // Setze die Minuten auf den Restwert
+                summeMinuten = summeMinuten % 60;
+            }
+        }
+        Summe = String.valueOf(summeStunden) + " Stunden : " + String.valueOf(summeMinuten) + " Minuten";
+        return Summe;
+    }
 
     public void loadPausezeiten() {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
