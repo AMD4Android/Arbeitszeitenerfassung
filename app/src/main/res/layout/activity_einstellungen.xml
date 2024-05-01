@@ -250,7 +250,7 @@
                     android:layout_height="40dp"
                     android:backgroundTint="#495a5d"
                     android:drawableLeft="@drawable/ic_manufacturing"
-                    android:text="Rechne Arbeitsstunden"
+                    android:text="Rechne"
                     android:textAllCaps="false"
                     android:textColor="@color/white"></Button>
             </LinearLayout>
@@ -264,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="00 Stunden : 00 Minuten"
+                    android:text="0 Stunden : 0 Minuten"
                     android:textColor="@color/white"
                     android:textSize="14sp"></TextView>
 
