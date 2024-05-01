@@ -282,6 +282,7 @@
                     android:text="Frühschicht"
                     ></TextView>
                 <TextView
+                    android:id="@+id/txt_gearbeitetezeiten_frueschicht"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -302,6 +303,7 @@
                     android:text="Spätschicht"
                     ></TextView>
                 <TextView
+                    android:id="@+id/txt_gearbeitetezeiten_spaetschicht"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
@@ -321,6 +323,7 @@
                 android:text="Nachtschicht"
                 ></TextView>
             <TextView
+                android:id="@+id/txt_gearbeitetezeiten_nachtschicht"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
