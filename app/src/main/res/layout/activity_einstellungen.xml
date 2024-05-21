@@ -191,8 +191,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="Monatsstunden"
+                android:padding="5dp"
                 android:textColor="@color/white"
                 android:textSize="14sp"></TextView>
 
@@ -288,7 +288,7 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:padding="5dp"
-                    android:text="10 Stunden : 50 Minuten"
+                    android:text="0 Stunden : 0 Minuten"
                     ></TextView>
             </LinearLayout>
             <LinearLayout
@@ -309,7 +309,7 @@
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:padding="5dp"
-                    android:text="10 Stunden : 50 Minuten"
+                    android:text="0 Stunden : 0 Minuten"
                     ></TextView>
             </LinearLayout>            <LinearLayout
             android:layout_width="match_parent"
@@ -329,10 +329,11 @@
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:padding="5dp"
-                android:text="10 Stunden : 50 Minuten"
+                android:text="0 Stunden : 0 Minuten"
                 ></TextView>
         </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.appcompat.widget.LinearLayoutCompat>

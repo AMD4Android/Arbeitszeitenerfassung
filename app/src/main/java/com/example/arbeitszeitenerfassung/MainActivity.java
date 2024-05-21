@@ -137,119 +137,153 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     if (ArbeitstagisCharacter == false && ArbeitsbeginnisNumericA == true && ArbeitsendeisNumericA == true) {
                         teil2 = false;
-                        Pause = checkRadiobutton();
+                        boolean check_if_in_List = false;
+                        for (int i = 0; i < zeitList.size(); i++) {
+                            if (zeitList.get(i).getDatum().contains(ausgewaehlteDatum)) {
+                                check_if_in_List = true;
+                                Toast.makeText(MainActivity.this, "Tag ist schon in der Liste", Toast.LENGTH_SHORT).show();
 
-                        if (Pause.equals("")) {
-                            Toast.makeText(MainActivity.this, "Schicht anklicken!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            if (Radiobutton_Nacht.isChecked()) {
-                                BerechneNachtschichtstunden(teil2);
+                                break;
                             }
-                            else{
-                                Pause = "00:" + Pause;
+                        }
+                        if (check_if_in_List = false) {
+                            Pause = checkRadiobutton();
 
-                                format = new SimpleDateFormat("HH:mm");
+                            if (Pause.equals("")) {
+                                Toast.makeText(MainActivity.this, "Schicht anklicken!", Toast.LENGTH_SHORT).show();
 
-                                // Zeit-Strings in Date-Objekte parsen
-
-                                int[] start = parseTime(Arbeitsbeginn);
-                                int[] end = parseTime(Arbeitsende);
-                                int[] pause2 = parseTime(Pause);
-
-                                int totalMinutes = calculateMinutes(end) - calculateMinutes(start);
-                                int effectiveMinutes = totalMinutes - calculateMinutes(pause2);
-
-                                // Arbeitszeit in Stunden und Minuten umrechnen
-                                int hours = effectiveMinutes / 60;
-                                int minutes = effectiveMinutes % 60;
-                                // Differenz in Stunden und Minuten umrechnen
-                                hours = hours;
-                                minutes = minutes;
-                                // String für die Differenz erstellen
-                                if (String.valueOf(hours).length() == 1) {
-                                    hoursString = "0" + hours;
+                            } else {
+                                if (Radiobutton_Nacht.isChecked()) {
+                                    BerechneNachtschichtstunden(teil2);
                                 } else {
-                                    hoursString = String.valueOf(hours);
-                                }
-                                if (String.valueOf(minutes).length() == 1) {
-                                    minutesString = "0" + minutes;
-                                } else {
-                                    minutesString = String.valueOf(minutes);
-                                }
-                                String Dauer = hoursString + ":" + minutesString;
+                                    Pause = "00:" + Pause;
 
-                                arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
+                                    format = new SimpleDateFormat("HH:mm");
+
+                                    // Zeit-Strings in Date-Objekte parsen
+
+                                    int[] start = parseTime(Arbeitsbeginn);
+                                    int[] end = parseTime(Arbeitsende);
+                                    int[] pause2 = parseTime(Pause);
+
+                                    int totalMinutes = calculateMinutes(end) - calculateMinutes(start);
+                                    int effectiveMinutes = totalMinutes - calculateMinutes(pause2);
+
+                                    // Arbeitszeit in Stunden und Minuten umrechnen
+                                    int hours = effectiveMinutes / 60;
+                                    int minutes = effectiveMinutes % 60;
+                                    // Differenz in Stunden und Minuten umrechnen
+                                    hours = hours;
+                                    minutes = minutes;
+                                    // String für die Differenz erstellen
+                                    if (String.valueOf(hours).length() == 1) {
+                                        hoursString = "0" + hours;
+                                    } else {
+                                        hoursString = String.valueOf(hours);
+                                    }
+                                    if (String.valueOf(minutes).length() == 1) {
+                                        minutesString = "0" + minutes;
+                                    } else {
+                                        minutesString = String.valueOf(minutes);
+                                    }
+                                    String Dauer = hoursString + ":" + minutesString;
+
+                                    arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
+                                }
+
+                                Toast.makeText(MainActivity.this, "Arbeitszeiten hinzugefügt", Toast.LENGTH_SHORT).show();
+                                dateButton.setText("Datum");
+                                txt_arbeitszeitenbeginn.setText("Zeit eingeben");
+                                txt_arbeitszeitenende.setText("Zeit eingeben");
                             }
-
-                            Toast.makeText(MainActivity.this, "Arbeitszeiten hinzugefügt", Toast.LENGTH_SHORT).show();
-                            dateButton.setText("Datum");
-                            txt_arbeitszeitenbeginn.setText("Zeit eingeben");
-                            txt_arbeitszeitenende.setText("Zeit eingeben");
                         }
 
 
                     } else if (ArbeitstagisCharacter == false && ArbeitsbeginnisNumericA == true && ArbeitsendeisNumericA == false) {
                         teil2 = false;
+                        boolean check_if_in_List = false;
+                        for (int i = 0; i < zeitList.size(); i++) {
+                            if (zeitList.get(i).getDatum().contains(ausgewaehlteDatum)) {
+                                check_if_in_List = true;
+                                Toast.makeText(MainActivity.this, "Tag ist schon in der Liste", Toast.LENGTH_SHORT).show();
 
-                        arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsschicht, Arbeitsbeginn, "", ""), teil2);
-                        Toast.makeText(MainActivity.this, "Arbeitszeit hinzugefügt", Toast.LENGTH_SHORT).show();
-                        dateButton.setText("Datum");
-                        txt_arbeitszeitenbeginn.setText("Zeit eingeben");
-                        txt_arbeitszeitenende.setText("Zeit eingeben");
-
-
-                    } else if (ArbeitstagisCharacter == false && ArbeitsbeginnisNumericA == false && ArbeitsendeisNumericA == true) {
-                        teil2 = true;
-                        Pause = checkRadiobutton();
-                        if (Pause.equals("")) {
-                            Toast.makeText(MainActivity.this, "Schicht anklicken!", Toast.LENGTH_SHORT).show();
-
-                        } else {
-                            Pause = "00:" + Pause;
-                            for (int i = 0; i < zeitList.size(); i++) {
-                                if (zeitList.get(i).getDatum().contains(ausgewaehlteDatum)) {
-                                    Arbeitsbeginn = String.valueOf(zeitList.get(i).getArbeitszeitstart());
-                                    break;
-                                }
+                                break;
                             }
-                            if (Radiobutton_Nacht.isChecked()) {
-                                BerechneNachtschichtstunden(teil2);
-                            } else {
-
-                                int[] start = parseTime(Arbeitsbeginn);
-                                int[] end = parseTime(Arbeitsende);
-                                int[] pause2 = parseTime(Pause);
-
-                                int totalMinutes = calculateMinutes(end) - calculateMinutes(start);
-                                int effectiveMinutes = totalMinutes - calculateMinutes(pause2);
-
-                                // Arbeitszeit in Stunden und Minuten umrechnen
-                                int hours = effectiveMinutes / 60;
-                                int minutes = effectiveMinutes % 60;
-                                // Differenz in Stunden und Minuten umrechnen
-                                hours = hours;
-                                minutes = minutes;
-                                // String für die Differenz erstellen
-                                if (String.valueOf(hours).length() == 1) {
-                                    hoursString = "0" + hours;
-                                } else {
-                                    hoursString = String.valueOf(hours);
-                                }
-                                if (String.valueOf(minutes).length() == 1) {
-                                    minutesString = "0" + minutes;
-                                } else {
-                                    minutesString = String.valueOf(minutes);
-                                }
-                                String Dauer = hoursString + ":" + minutesString;
-                                arbeitszeitDAO.addArbeitstag(new Arbeitszeit(ausgewaehlteDatum, Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
-                            }
-
+                        }
+                        if (check_if_in_List == false) {
+                            arbeitszeitDAO.addArbeitstag(new Arbeitszeit(Arbeitstag, Arbeitsschicht, Arbeitsbeginn, "", ""), teil2);
                             Toast.makeText(MainActivity.this, "Arbeitszeit hinzugefügt", Toast.LENGTH_SHORT).show();
                             dateButton.setText("Datum");
                             txt_arbeitszeitenbeginn.setText("Zeit eingeben");
                             txt_arbeitszeitenende.setText("Zeit eingeben");
                         }
+
+
+                    } else if (ArbeitstagisCharacter == false && ArbeitsbeginnisNumericA == false && ArbeitsendeisNumericA == true) {
+                        teil2 = true;
+                        boolean check_if_in_List = false;
+                        for (int i = 0; i < zeitList.size(); i++) {
+                            if (zeitList.get(i).getDatum().contains(ausgewaehlteDatum)) {
+                                if (!zeitList.get(i).getArbeitszeitende().isEmpty()) {
+                                    check_if_in_List = true;
+                                    Toast.makeText(MainActivity.this, "Tag ist schon in der Liste", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+
+                            }
+                        }
+                        if(check_if_in_List == false){
+                            Pause = checkRadiobutton();
+                            if (Pause.equals("")) {
+                                Toast.makeText(MainActivity.this, "Schicht anklicken!", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Pause = "00:" + Pause;
+                                for (int i = 0; i < zeitList.size(); i++) {
+                                    if (zeitList.get(i).getDatum().contains(ausgewaehlteDatum)) {
+                                        Arbeitsbeginn = String.valueOf(zeitList.get(i).getArbeitszeitstart());
+                                        break;
+                                    }
+                                }
+                                if (Radiobutton_Nacht.isChecked()) {
+                                    BerechneNachtschichtstunden(teil2);
+                                } else {
+
+                                    int[] start = parseTime(Arbeitsbeginn);
+                                    int[] end = parseTime(Arbeitsende);
+                                    int[] pause2 = parseTime(Pause);
+
+                                    int totalMinutes = calculateMinutes(end) - calculateMinutes(start);
+                                    int effectiveMinutes = totalMinutes - calculateMinutes(pause2);
+
+                                    // Arbeitszeit in Stunden und Minuten umrechnen
+                                    int hours = effectiveMinutes / 60;
+                                    int minutes = effectiveMinutes % 60;
+                                    // Differenz in Stunden und Minuten umrechnen
+                                    hours = hours;
+                                    minutes = minutes;
+                                    // String für die Differenz erstellen
+                                    if (String.valueOf(hours).length() == 1) {
+                                        hoursString = "0" + hours;
+                                    } else {
+                                        hoursString = String.valueOf(hours);
+                                    }
+                                    if (String.valueOf(minutes).length() == 1) {
+                                        minutesString = "0" + minutes;
+                                    } else {
+                                        minutesString = String.valueOf(minutes);
+                                    }
+                                    String Dauer = hoursString + ":" + minutesString;
+                                    arbeitszeitDAO.addArbeitstag(new Arbeitszeit(ausgewaehlteDatum, Arbeitsschicht, Arbeitsbeginn, Arbeitsende, Dauer), teil2);
+                                }
+
+                                Toast.makeText(MainActivity.this, "Arbeitszeit hinzugefügt", Toast.LENGTH_SHORT).show();
+                                dateButton.setText("Datum");
+                                txt_arbeitszeitenbeginn.setText("Zeit eingeben");
+                                txt_arbeitszeitenende.setText("Zeit eingeben");
+                            }
+                        }
+
 
                     } else {
                         Toast.makeText(MainActivity.this, "Bitte versuchen Sie noch ein mal", Toast.LENGTH_SHORT).show();
@@ -337,13 +371,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Umwandeln in String
         String gesamtArbeitszeitStunden_String = String.valueOf(gesamtArbeitszeitStunden);
-        if(gesamtArbeitszeitStunden_String.length() == 1){
-            gesamtArbeitszeitStunden_String = "0"+ gesamtArbeitszeitStunden_String;
+        if (gesamtArbeitszeitStunden_String.length() == 1) {
+            gesamtArbeitszeitStunden_String = "0" + gesamtArbeitszeitStunden_String;
         }
 
         String gesamtArbeitszeitRestMinuten_String = String.valueOf(gesamtArbeitszeitRestMinuten);
-        if(gesamtArbeitszeitRestMinuten_String.length() == 1){
-            gesamtArbeitszeitRestMinuten_String = "0"+ gesamtArbeitszeitRestMinuten_String;
+        if (gesamtArbeitszeitRestMinuten_String.length() == 1) {
+            gesamtArbeitszeitRestMinuten_String = "0" + gesamtArbeitszeitRestMinuten_String;
         }
 
         // Ausgabe der berechneten Gesamtarbeitszeit

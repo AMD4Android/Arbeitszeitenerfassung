@@ -79,6 +79,7 @@ public class EinstellungenActivity extends AppCompatActivity {
         txt_gearbeitetezeiten_spaetschicht = findViewById(R.id.txt_gearbeitetezeiten_spaetschicht);
         txt_gearbeitetezeiten_nachtschicht = findViewById(R.id.txt_gearbeitetezeiten_nachtschicht);
 
+
         loadPausezeiten();
         boolean Buttonistklickable = getIntent().getBooleanExtra("Buttonistklickable", false);
 
@@ -131,7 +132,10 @@ public class EinstellungenActivity extends AppCompatActivity {
                         Arbeitsstundenliste_Spaetschicht = new ArrayList<>();
                         Arbeitsstundenliste_Nachtschicht = new ArrayList<>();
 
-
+                        String gearbeitete_Stunden = "";
+                        String gearbeiteteStunden_Fruehschicht = "";
+                        String gearbeiteteStunden_Spaetschicht = "";
+                        String gearbeiteteStunden_Nachtschicht = "";
                         for (Arbeitszeit arbeitszeit : liste) {
 
 
@@ -143,19 +147,31 @@ public class EinstellungenActivity extends AppCompatActivity {
                                 String monatJahr2 = sdf2.format(date2);
 
                                 if (monatJahr1.equals(monatJahr2)) {
-                                    Arbeitsstundenliste.add(arbeitszeit.getTagesarbeitDauer());
+                                    if (!arbeitszeit.getTagesarbeitDauer().isEmpty()) {
+                                        Arbeitsstundenliste.add(arbeitszeit.getTagesarbeitDauer());
+
+                                    }
                                 }
 
-                                if (arbeitszeit.getArbeitsschicht().toString().equals("FS")) {
-                                    Arbeitsstundenliste_Fruehschicht.add(arbeitszeit.getTagesarbeitDauer());
+                                if (monatJahr1.equals(monatJahr2) && arbeitszeit.getArbeitsschicht().toString().equals("FS")) {
+                                    if (!arbeitszeit.getTagesarbeitDauer().isEmpty()) {
+                                        Arbeitsstundenliste_Fruehschicht.add(arbeitszeit.getTagesarbeitDauer());
+
+                                    }
 
                                 }
-                                if (arbeitszeit.getArbeitsschicht().toString().equals("SS")) {
-                                    Arbeitsstundenliste_Spaetschicht.add(arbeitszeit.getTagesarbeitDauer());
+                                if (monatJahr1.equals(monatJahr2) && arbeitszeit.getArbeitsschicht().toString().equals("SS")) {
+                                    if (!arbeitszeit.getTagesarbeitDauer().isEmpty()) {
+                                        Arbeitsstundenliste_Spaetschicht.add(arbeitszeit.getTagesarbeitDauer());
+
+                                    }
 
                                 }
-                                if (arbeitszeit.getArbeitsschicht().toString().equals("NS")) {
-                                    Arbeitsstundenliste_Nachtschicht.add(arbeitszeit.getTagesarbeitDauer());
+                                if (monatJahr1.equals(monatJahr2) && arbeitszeit.getArbeitsschicht().toString().equals("NS")) {
+                                    if (!arbeitszeit.getTagesarbeitDauer().isEmpty()) {
+                                        Arbeitsstundenliste_Nachtschicht.add(arbeitszeit.getTagesarbeitDauer());
+
+                                    }
 
                                 }
 
@@ -166,12 +182,13 @@ public class EinstellungenActivity extends AppCompatActivity {
 
 
                         }
-                        // hier werden die Arbeitszeiten in eine Liste hinzugefügt und addiert dann werden die angezeigt
-                        String gearbeitete_Stunden = rechneStunden(Arbeitsstundenliste);
-                        String gearbeiteteStunden_Fruehschicht = rechneStunden(Arbeitsstundenliste_Fruehschicht);
-                        String gearbeiteteStunden_Spaetschicht = rechneStunden(Arbeitsstundenliste_Spaetschicht);
-                        String gearbeiteteStunden_Nachtschicht = rechneStunden(Arbeitsstundenliste_Nachtschicht);
 
+
+                        // hier werden die Arbeitszeiten in eine Liste hinzugefügt und addiert dann werden die angezeigt
+                        gearbeitete_Stunden = rechneStunden(Arbeitsstundenliste);
+                        gearbeiteteStunden_Fruehschicht = rechneStunden(Arbeitsstundenliste_Fruehschicht);
+                        gearbeiteteStunden_Spaetschicht = rechneStunden(Arbeitsstundenliste_Spaetschicht);
+                        gearbeiteteStunden_Nachtschicht = rechneStunden(Arbeitsstundenliste_Nachtschicht);
 
                         txt_gearbeitetezeiten.setText(gearbeitete_Stunden);
                         txt_gearbeitetezeiten_frueschicht.setText(gearbeiteteStunden_Fruehschicht);
@@ -182,7 +199,7 @@ public class EinstellungenActivity extends AppCompatActivity {
                     }
 
 
-                    Toast.makeText(EinstellungenActivity.this, "Button wurde geklickt", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(EinstellungenActivity.this, "Button wurde geklickt", Toast.LENGTH_SHORT).show();
 
                 }
             });
